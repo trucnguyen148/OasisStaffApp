@@ -3,94 +3,55 @@ import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import {styles} from './../components/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Subtitle, View, Text, DropDownMenu } from '@shoutem/ui';
+import { graphql } from 'react-apollo';
+import { getBookingsQuery, getServicesQuery } from '../components/queries/queries';
+import flowright from "lodash.flowright";
+
 
 class BookingsScreen extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      services: [
-        {"name": "Nails"},
-        {"name": "Permanent Make-up"},
-        {"name": "Eyelash Extension"}
-      ],
-      waitingBookings: [
-        {
-          "date": "05/08/2019",
-          "customerName": "Nguyen Thu Thuy",
-          "phone": "090.xxx.xxxx",
-          "level": "Gold",
-          "waitingBooking": "11:00",
-          "finishedBooking": "",
-          "service": "nails",
-          "analyzedData": "xxxx"
-        },
-        {
-          "date": "06/08/2019",
-          "customerName": "Nguyen Thu Thuy",
-          "phone": "090.xxx.xxxx",
-          "level": "Gold",
-          "waitingBooking": "11:00",
-          "finishedBooking": "",
-          "service": "nails",
-          "analyzedData": "xxxx"
-        },
-        {
-          "date": "07/08/2019",
-          "customerName": "Nguyen Thu Thuy",
-          "phone": "090.xxx.xxxx",
-          "level": "Gold",
-          "waitingBooking": "11:00",
-          "finishedBooking": "",
-          "service": "nails",
-          "analyzedData": "xxxx"
-        },
-        {
-          "date": "08/08/2019",
-          "customerName": "Nguyen Thu Thuy",
-          "phone": "090.xxx.xxxx",
-          "level": "Gold",
-          "waitingBooking": "11:00",
-          "finishedBooking": "",
-          "service": "nails",
-          "analyzedData": "xxxx"
-        },{
-          "date": "09/08/2019",
-          "customerName": "Nguyen Thu Thuy",
-          "phone": "090.xxx.xxxx",
-          "level": "Gold",
-          "waitingBooking": "11:00",
-          "finishedBooking": "",
-          "service": "nails",
-          "analyzedData": "xxxx"
-        },
-        {
-          "date": "10/08/2019",
-          "customerName": "Nguyen Thu Thuy",
-          "phone": "090.xxx.xxxx",
-          "level": "Gold",
-          "waitingBooking": "11:00",
-          "finishedBooking": "",
-          "service": "nails",
-          "analyzedData": "xxxx"
-        },
-        {
-          "date": "11/08/2019",
-          "customerName": "Nguyen Thu Thuy",
-          "phone": "090.xxx.xxxx",
-          "level": "Gold",
-          "waitingBooking": "11:00",
-          "finishedBooking": "",
-          "service": "nails",
-          "analyzedData": "xxxx"
-        }
-
-      ]
+      services: [],
+      waitingBookings: []
     }
   }
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
+
+  dataBookings (){
+    const data = this.props.getBookingsQuery;
+    if(data.loading){
+      console.log('Loading')
+    } else {
+      data.bookings.map(booking => {
+        this.state.waitingBookings.push({
+          "id": booking.id,
+          "date": booking.date_time,
+          "customerName" : booking.cus.name
+        })
+      })
+    }
+  }
+
+  dataServices (){
+    const data = this.props.getServicesQuery;
+    if(data.loading){
+      console.log('Loading')
+    } else {
+      data.positions.map(service => {
+        this.state.services.push({
+          "id": service.id,
+          "name": service.name,
+          
+        })
+      })
+    }
+  }
   render(){
+    this.dataBookings();
+    this.dataServices();
     const waitingBookings = this.state.waitingBookings;
     const selectedService = this.state.selectedService || this.state.services[0];
     return (
@@ -109,12 +70,12 @@ class BookingsScreen extends React.Component{
             </View>
           </View>
           <ScrollView>
-          {waitingBookings.map((booking, id) => {
+          {waitingBookings.map((booking) => {
             return(
-              <LinearGradient key={id} colors={['#FFE5E5', '#FFC0CB']} style={styles.booking} >
+              <LinearGradient key={booking.id} colors={['#FFE5E5', '#FFC0CB']} style={styles.booking} >
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailsBooking')}>
                 <View style={styles.sameRow} >
-                  <Subtitle style={bookingStyles.floatRightTime}>{booking.waitingBooking}</Subtitle>
+                  {/* <Subtitle style={bookingStyles.floatRightTime}>{booking.waitingBooking}</Subtitle> */}
                   <Subtitle style={bookingStyles.floatRightDate}>{booking.date}</Subtitle>
                   
                   </View>
@@ -131,7 +92,14 @@ class BookingsScreen extends React.Component{
   }
 }
 
-export default BookingsScreen 
+export default flowright(
+  graphql(getBookingsQuery, {
+     name: "getBookingsQuery"
+  }),
+  graphql(getServicesQuery, {
+     name: "getServicesQuery"
+  }),
+)(BookingsScreen);
 
 BookingsScreen.navigationOptions = {
   title: 'BOOKINGS',
