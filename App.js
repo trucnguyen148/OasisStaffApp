@@ -6,6 +6,17 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 
+// GraphQL
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createHttpLink } from 'apollo-link-http';
+import { ApolloProvider } from '@apollo/react-hooks';
+
+const client = new ApolloClient({ 
+  link: createHttpLink({ uri: 'http://171.244.18.14:8888/graphql' }),
+  cache: new InMemoryCache() 
+});
+
 export default function App(props) {
   
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -20,10 +31,12 @@ export default function App(props) {
     );
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
+      <ApolloProvider client={client}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator />
+        </View>
+      </ApolloProvider>
     );
   }
 }

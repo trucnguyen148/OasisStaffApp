@@ -1,0 +1,355 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+type Query {
+    users: [User!]! @paginate(type: "paginator" model: "App\\User")
+    user(id: ID @eq): User @find(model: "App\\User")
+
+    products: [Products] @all
+    product(id: ID @eq): Products @find
+    product_type(type: Int @eq): [Products] @all
+
+    categories: [Category] @all 
+    category(id: ID @eq): Category @find
+    positions(type: Int @eq): [Category] @all
+
+    branches: [Branch] @all
+    branch(id: ID @eq): Branch @find
+
+    employees: [Employee] @all
+    employee(id: ID @eq): Employee @find
+
+    customers: [Customer] @all
+    customer(id: ID @eq): Customer @find
+
+    bookings: [Booking] @all 
+    bookings_progress(progress: Int! @eq): [Booking] @all 
+    booking(id: ID @eq): Booking @find
+    
+    hotdeals: [Hotdeal] @all
+    hotdeal(id: ID @eq): Hotdeal @find
+
+    customerRanks: [CustomerRank] @all 
+    customerRank(id: ID @eq): CustomerRank @find
+
+    workTimes: [WorkTimes] @all 
+    workTime(id: ID @eq): WorkTimes @find
+
+    workflows: [Workflow] @all 
+    workflow(id: ID @eq): Workflow @find
+
+    steps: [Step] @all 
+    step(id: ID @eq): Step @find
+
+    cards: [Card] @all 
+    card(id: ID @eq): Card @find
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Products {
+    id: ID!
+    name: String!
+    unit_price: Int
+    unit_cost: Int
+    description: String
+    type: Int
+    image: String
+    category: Category @belongsTo
+    bookings: [Booking] @belongsToMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Category {
+    id: ID!
+    name: String!
+    description: String,
+    products: [Products] @hasMany
+    employees: [Employee] @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Branch {
+    id: ID!
+    name: String!
+    phone: String
+    address: String
+    is_active: Boolean
+    employees: [Employee] @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Employee {
+    id: ID!
+    name: String!
+    gender: Int
+    phone: String
+    facebook: String
+    address: String
+    email: String
+    dob: String
+    branch: Branch @belongsTo
+    worktime: WorkTimes @belongsTo
+    bookings: [Booking] @hasMany
+    position: Category @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Customer {
+    id: ID!
+    name: String!
+    gender: Int
+    phone: String
+    facebook: String
+    address: String
+    email: String
+    dob: String
+    image: String
+    note: String
+    bookings: [Booking] @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Booking {
+    id: ID!
+    date_time: String!
+    note: String
+    progress: Int
+    ratings: Int
+    review: String
+    emp: Employee @belongsTo
+    cus: Customer @belongsTo
+    products: [Products] @belongsToMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Hotdeal {
+    id: ID!
+    name: String
+    description: String 
+    c_rank: CustomerRank @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type CustomerRank {
+    id: ID!
+    name: String!
+    description: String 
+    point: Int! 
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type WorkTimes {
+    id: ID!
+    start: String
+    end: String
+    employees: [Employee] @hasMany
+}
+
+type Workflow {
+    id: ID!
+    name: String!
+    steps: [Step] @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Step {
+    id: ID!
+    name: String!
+    cards: [Card] @hasMany
+    workflow: Workflow @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Card {
+    id: ID!
+    step: Step @belongsTo
+    customer: Customer @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Mutation {
+
+    # Product
+    createProduct(input: ProductInput! @spread): Products @create
+    updateProduct(id: ID! input: ProductInput! @spread): Products @update
+    deleteProduct(id: ID!): Products @delete
+
+    # Category
+    createCategory(input: CategoryInput! @spread): Category @create
+    updateCategory(id: ID! input: CategoryInput! @spread): Category @update
+    deleteCategory(id: ID!): Category @delete
+
+    # Branch
+    createBranch(input: BranchInput! @spread): Branch @create
+    updateBranch(id: ID! input: BranchInput! @spread): Branch @update
+    deleteBranch(id: ID!): Branch @delete
+
+    # Employee
+    createEmployee(input: EmployeeInput! @spread): Employee @create
+    updateEmployee(id: ID! input: EmployeeInput! @spread): Employee @update
+    deleteEmployee(id: ID!): Employee @delete
+
+    # Customer
+    createCustomer(input: CustomerInput! @spread): Customer @create
+    updateCustomer(id: ID! input: CustomerInput! @spread): Customer @update
+    deleteCustomer(id: ID!): Customer @delete
+
+    # Booking
+    createBooking(input: CreateBookingInput! @spread): Booking @create
+    updateBooking(input: UpdateBookingInput! @spread): Booking @update
+    deleteBooking(id: ID!): Booking
+
+    # Hotdeal
+    createHotdeal(input: HotdealInput! @spread): Hotdeal @create
+    updateHotdeal(id: ID! input: HotdealInput! @spread): Hotdeal @update
+    deleteHotdeal(id: ID!): Hotdeal @delete
+
+    # CustomerRank
+    createCustomerRank(input: CustomerRankInput! @spread): CustomerRank @create
+    updateCustomerRank(id: ID! input: CustomerRankInput! @spread): CustomerRank @update
+    deleteCustomerRank(id: ID!): CustomerRank @delete
+
+    # WorkTime
+    createWorkTime(input: WorkTimesInput! @spread): WorkTimes @create
+    updateWorkTime(id: ID! input: WorkTimesInput! @spread): WorkTimes @update
+    deleteWorkTime(id: ID!): WorkTimes @delete
+
+    # Workflow
+    createWorkflow(input: WorkflowInput! @spread): Workflow @create
+    updateWorkflow(id: ID! input: WorkflowInput! @spread): Workflow @update
+    deleteWorkflow(id: ID!): Workflow @delete
+
+    # Step
+    createStep(input: StepInput! @spread): Step @create
+    updateStep(id: ID! input: StepInput! @spread): Step @update
+    deleteStep(id: ID!): Step @delete
+
+    # Card
+    createCard(input: CardInput! @spread): Card @create
+    updateCard(id: ID! input: CardInput! @spread): Card @update
+    deleteCard(id: ID!): Card @delete
+}
+
+input ProductInput {
+    name: String
+    description: String
+    image: String 
+    category_id: Int
+    type: Int
+    unit_price: Int
+    unit_cost: Int
+}
+input CategoryInput {
+    type: Int
+    name: String
+    description: String
+}
+input BranchInput {
+    name: String
+    phone: String @rules(apply: ["numeric"])
+    address: String
+    is_active: Int
+}
+input EmployeeInput {
+    name: String
+    gender: Int
+    phone: String @rules(apply: ["numeric"])
+    email: String @rules(apply: ["email"])
+    facebook: String
+    address: String
+    dob: String
+    image: String
+    branch_id: Int
+    position_id: Int
+    worktime_id: Int
+    
+}
+input CustomerInput {
+    name: String
+    gender: Int
+    phone: String @rules(apply: ["unique:customers,phone", "numeric"])
+    email: String @rules(apply: ["unique:customers,email", "email"])
+    facebook: String
+    address: String
+    dob: String
+    image: String
+    note: String
+}
+input CreateBookingInput{
+    cus_id: Int!
+    emp_id: Int!
+    date_time: String!
+    note: String
+    progress: Int
+    products: addProductsRelation!
+}
+input addProductsRelation {
+    connect: [Int]
+}
+input UpdateBookingInput {
+    id: ID!
+    cus_id: Int
+    emp_id: Int
+    date_time: DateTime
+    note: String
+    progress: Int
+    ratings: Int
+    products: updateProductsRelation
+}
+input updateProductsRelation {
+    sync: [ID!]
+}
+
+input HotdealInput {
+    name: String
+    description: String
+    image: String 
+    cus_rank_id: Int
+}
+input CustomerRankInput {
+    name: String
+    point: Int
+    description: String
+}
+
+input WorkTimesInput {
+    name: String
+    start: String
+    end: String
+}
+
+input WorkflowInput {
+    name: String
+}
+
+input StepInput {
+    name: String!
+    workflow_id: Int!
+}
+
+input CardInput {
+    step_id: Int!
+    customer_id: Int!
+}
+
