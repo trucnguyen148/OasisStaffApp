@@ -13,6 +13,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import DetailsCollection from '../screens/Collections/DetailsCollection';
 import DetailsBooking from '../screens/Schedule/DetailsBooking';
 import EditProfile from '../screens/Profile/EditProfile';
+import DetailNews from '../screens/News/DetailNews';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -23,6 +24,7 @@ const config = Platform.select({
 const NewsStack = createStackNavigator(
   {
     News: NewsScreen,
+    DetailNews: DetailNews
   },
   config
 );

@@ -5,6 +5,21 @@ import { Image } from '@shoutem/ui/html';
 import {styles, buttons} from './../components/styles';
 
 class ProfilesScreen extends React.Component {
+    // Title
+    static navigationOptions = {
+        title: 'YOUR PROFILE',
+        headerTintColor :'#000000',
+        headerStyle: {
+          backgroundColor: '#fff',
+          borderBottomWidth: 0.3,
+          borderBottomColor: '#A91B60',
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 18
+        },
+    };
+
     constructor(props){
         super(props);
         this.state ={
@@ -76,19 +91,6 @@ class ProfilesScreen extends React.Component {
 }
 export default ProfilesScreen
 
-ProfilesScreen.navigationOptions = {
-    title: 'YOUR PROFILE',
-    headerTintColor :'#000000',
-    headerStyle: {
-      backgroundColor: '#fff',
-      borderBottomWidth: 0.3,
-      borderBottomColor: '#A91B60',
-    },
-    headerTitleStyle: {
-      fontWeight: 'bold',
-      fontSize: 18
-    },
-  };
   
 const profileStyles = StyleSheet.create({
     card: {
