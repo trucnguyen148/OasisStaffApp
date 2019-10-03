@@ -28,33 +28,72 @@ class CollectionsScreen extends React.Component{
           {
             "id": 0,
               "name": "Gaspar Brasserie",
-              "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+              "images": [
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+              ]
               
           },
           {
             "id": 1, 
               "name": "Chalk Point Kitchen",
-              "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+              "images": [
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+              ]
           },
           {
             "id": 2,
               "name": "Kyoto Amber Upper East",
-              "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+              "images": [
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+              ]
           },
           {
             "id": 3,
               "name": "Kyoto Amber Upper East",
-              "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+              "images": [
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+              ]
           },
           {
             "id": 4,
               "name": "Kyoto Amber Upper East",
-              "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" },
+              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" },
+              "images": [
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+              ]
           },
           {
             "id": 5,
               "name": "Kyoto Amber Upper East",
-              "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-6.jpg" },
+              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-6.jpg" },
+              "images": [
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-6.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
+                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
+              ]
           }
         ],
       }
@@ -68,14 +107,13 @@ class CollectionsScreen extends React.Component{
       const cellViews = rowData.map((collection) => {
         return (
           <View key={collection.id}>
-          <TouchableOpacity onPress={() => {
-          this.setModalVisible(true);
-        }}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Details', {
+                    collection: collection})}>
             <Card style={collectionStyles.border}>
               <Image
                 styleName="medium-wide"
                 style={collectionStyles.image}
-                source={{ uri: collection.image.url  }}
+                source={{ uri: collection.avatar.url  }}
               />
               <View styleName="content">
                 <Subtitle style={collectionStyles.subtitle} numberOfLines={3}>{collection.name}</Subtitle>
@@ -84,7 +122,7 @@ class CollectionsScreen extends React.Component{
           </TouchableOpacity>
 
           {/* Modal detail Collection */}
-          <Modal
+          {/* <Modal
             animationType="slide"
             transparent={false}
             visible={this.state.modalVisible}
@@ -104,7 +142,7 @@ class CollectionsScreen extends React.Component{
                 </TouchableHighlight>
               </View>
             </View>
-          </Modal>
+          </Modal> */}
           </View>
         );
       });

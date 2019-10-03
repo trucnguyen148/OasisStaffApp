@@ -5,7 +5,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Subtitle, View, Text, DropDownMenu } from '@shoutem/ui';
 import { graphql } from 'react-apollo';
 import { getBookingsQuery } from '../components/queries/queries';
-import flowright from "lodash.flowright";
 
 
 class BookingsScreen extends React.Component{
@@ -30,6 +29,7 @@ class BookingsScreen extends React.Component{
       categories: [],
       waitingBookings: [],
       refresh: false,
+      modalVisible: false,
     }
   }
 

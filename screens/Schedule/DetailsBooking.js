@@ -1,13 +1,14 @@
 import React from 'react';
 import { ScrollView, Modal, FlatList } from 'react-native';
-import { View, Text, Subtitle, Button, Image, DropDownMenu, SearchBar, Title  } from '@shoutem/ui';
+import { View, Text, Subtitle, Button, Image, DropDownMenu, Title  } from '@shoutem/ui';
 import {styles, buttons} from './../../components/styles';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { Icon } from 'native-base';
 import { graphql } from 'react-apollo';
-import { getDetailBookingQuery } from '../../components/queries/queries';
+import { getDetailBookingServiceQuery, getDetailBookingProductQuery } from '../../components/queries/queries';
+import flowright from "lodash.flowright";
 
 class DetailsBooking extends React.Component {
     constructor(props){
@@ -24,12 +25,16 @@ class DetailsBooking extends React.Component {
             search: '',
             categories: [],
             services: [],
+            productCategories: [],
+            products: [],
             refreshFlastlist: false,
+            firstTime: false
         }
     }
     // ImagePicker function
     componentDidMount() {
         this.getPermissionAsync();
+        this.state.firstTime = true;
     }
     getPermissionAsync = async () => {
         if (Constants.platform.ios) {
@@ -40,7 +45,9 @@ class DetailsBooking extends React.Component {
         }
     }
     _pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+        let result = await
+
+        ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,
           aspect: [4, 3],
@@ -50,6 +57,7 @@ class DetailsBooking extends React.Component {
           this.setState({ image: result.uri });
         }
     };
+
     _pickImage1 = async () => {
         let result1 = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -112,8 +120,8 @@ class DetailsBooking extends React.Component {
         );
     }; 
     
-    // Get Data
-    getData(data) {
+    // Get Data Service
+    getDataServices(data, firstTime) {
         if(data.loading){
             console.log('Loading')
         } else {
@@ -125,14 +133,14 @@ class DetailsBooking extends React.Component {
                     })
                 })
             }
-            if (this.state.services.length == 0) {
-                this.getProducts(data, this.state.categories[1].id)
+            if (firstTime) {
+                this.getServices(data, this.state.categories[0].id)
+                this.state.firstTime = false
             }
         }
     }
 
-    
-    getProducts(data, category_id){
+    getServices(data, category_id){
         if(data.loading){
             console.log('Loading')
         } else {
@@ -140,7 +148,7 @@ class DetailsBooking extends React.Component {
 
             this.state.services = [];
             return data.product_type.filter(product => {
-                return product.category.id = category_id
+                return product.category.id == category_id
             })
             .map(product => {
                 this.state.services.push({
@@ -151,9 +159,52 @@ class DetailsBooking extends React.Component {
             })
         }
     }
+
+    // Get Data Product 
+    getDataProducts(dataProduct, firstTime) {
+        if(dataProduct.loading){
+            console.log('Loading')
+        } else {
+            if (this.state.productCategories.length == 0) {
+                dataProduct.positions.map(service => {
+                    this.state.productCategories.push({
+                        "id": service.id,
+                        "name": service.name
+                    })
+                })
+            }
+            if (firstTime) {
+                this.getProducts(dataProduct, this.state.productCategories[0].id)
+                this.state.firstTime = false
+            }
+        }
+    }
+
+    getProducts(dataProduct, productCategory_id){
+        if(dataProduct.loading){
+            console.log('Loading')
+        } else {
+            console.log(dataProduct.product_type)
+
+            this.state.products = [];
+            return dataProduct.product_type.filter(product => {
+                return product.category.id == productCategory_id
+            })
+            .map(product => {
+                this.state.products.push({
+                    "id": product.id,
+                    "name": product.name,
+                    "price": product.unit_price + "e"
+                })
+            })
+        }
+    }
+
     render(){
-        const data = this.props.data;
-        this.getData(data);
+        const data = this.props.getDetailBookingServiceQuery;
+        this.getDataServices(data);
+        const dataProduct = this.props.getDetailBookingProductQuery;
+        this.getDataProducts(dataProduct, this.state.firstTime);
         const { navigation } = this.props; 
         const booking = navigation.getParam('booking', '');
         let { image } = this.state;
@@ -161,6 +212,8 @@ class DetailsBooking extends React.Component {
         let { image2 } = this.state;
         let { image3 } = this.state;
         const selectedCategory = this.state.selectedCategory || this.state.categories[0];
+        const selectedProductCategory = this.state.selectedProductCategory || this.state.productCategories[0];
+
 
         return(
             <ScrollView style={styles.container}>
@@ -245,16 +298,18 @@ class DetailsBooking extends React.Component {
                             options={this.state.categories}
                             selectedOption={selectedCategory ? selectedCategory : this.state.categories[0]}
                             onOptionSelected={
-                              (category) => {
-                                this.setState({ selectedCategory: category })
-                                this.getProducts(data, category.id)
+                                (category) => {
+                                  this.setState({ selectedCategory: category })
+                                  this.getServices(data, category.id)
+                                }
                               }
-                            }
                             titleProperty="name"
                             valueProperty="categories.name"
                             style={{color: '#fff'}}
                             style={{
                                 selectedOption: {
+                                    // width: '40%',
+                                    
                                     textAlign: 'right',
                                     'shoutem.ui.Text': {
                                         color: '#ffffff',
@@ -347,9 +402,14 @@ class DetailsBooking extends React.Component {
                         </View>
                         <View style={styles.floatRight}>
                         <DropDownMenu
-                            options={this.state.categories}
-                            selectedOption={selectedCategory ? selectedCategory : this.state.categories[0]}
-                            onOptionSelected={(category) => this.setState({ selectedCategory: category })}
+                            options={this.state.productCategories}
+                            selectedOption={selectedProductCategory ? selectedProductCategory : this.state.productCategories[0]}
+                            onOptionSelected={
+                                (category) => {
+                                  this.setState({ selectedProductCategory: category })
+                                  this.getProducts(dataProduct, category.id)
+                                }
+                              }
                             titleProperty="name"
                             valueProperty="categories.name"
                             style={{color: '#fff'}}
@@ -373,8 +433,9 @@ class DetailsBooking extends React.Component {
                     {/* Show details with Flatlist */}
                     <ScrollView >
                         <FlatList
-                        data={this.state.services}
+                        data={this.state.products}
                         ItemSeparatorComponent={this.serviceSeparator}
+                        extraData={this.state.refreshFlastlist}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.sameRowFlatList} >
@@ -426,4 +487,12 @@ class DetailsBooking extends React.Component {
     }
 }
 
-export default graphql(getDetailBookingQuery) (DetailsBooking)
+export default flowright(
+      graphql(getDetailBookingServiceQuery, {
+         name: "getDetailBookingServiceQuery"
+      }),
+      graphql(getDetailBookingProductQuery, {
+         name: "getDetailBookingProductQuery"
+      }),
+    )(DetailsBooking);
+    

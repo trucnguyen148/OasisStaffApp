@@ -25,6 +25,25 @@ const getBookingsQuery = gql`
         }
       }
     }
+    positions(type: 2) {
+    id
+    name
+  }
+  bookings {
+    id
+    date_time
+    products {
+      id
+      category {
+        id
+      }
+    }
+    cus {
+      id
+      name
+      phone
+    }
+  }
   }
 `
 const getScheduleQuery = gql`
@@ -52,7 +71,7 @@ const getAnnoucementsQuery = gql`
   }
 `
 
-const getDetailBookingQuery = gql`
+const getDetailBookingServiceQuery = gql`
   {
     positions(type: 2) {
       id
@@ -68,4 +87,21 @@ const getDetailBookingQuery = gql`
       }
   }
 `
-export  {getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingQuery}
+
+const getDetailBookingProductQuery = gql`
+  {
+    positions(type: 1) {
+      id
+      name
+    },
+    product_type(type: 1) {
+      id 
+      name 
+      unit_price
+      category{
+        id
+      }
+    }
+  }
+`
+export  {getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingServiceQuery, getDetailBookingProductQuery}
