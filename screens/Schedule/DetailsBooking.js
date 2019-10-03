@@ -126,7 +126,7 @@ class DetailsBooking extends React.Component {
                 })
             }
             if (this.state.services.length == 0) {
-                this.getProducts(data, this.state.categories[1].id)
+                this.getProducts(data, this.state.categories[0].id)
             }
         }
     }
@@ -136,11 +136,9 @@ class DetailsBooking extends React.Component {
         if(data.loading){
             console.log('Loading')
         } else {
-            console.log(data.product_type)
-
             this.state.services = [];
             return data.product_type.filter(product => {
-                return product.category.id = category_id
+                return product.category.id == category_id
             })
             .map(product => {
                 this.state.services.push({
