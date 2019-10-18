@@ -52,7 +52,6 @@ class DetailsBooking extends React.Component {
           allowsEditing: true,
           aspect: [4, 3],
         });
-        console.log(result);
         if (!result.cancelled ) {
           this.setState({ image: result.uri });
         }
@@ -64,7 +63,6 @@ class DetailsBooking extends React.Component {
           allowsEditing: true,
           aspect: [4, 3],
         });
-        console.log(result1);
         if (!result1.cancelled ) {
           this.setState({ image1: result1.uri });
         }
@@ -75,7 +73,6 @@ class DetailsBooking extends React.Component {
             allowsEditing: true,
             aspect: [4, 3],
           });
-        console.log(result2);
         if (!result2.cancelled) {
           this.setState({ image2: result2.uri });
         }
@@ -86,7 +83,6 @@ class DetailsBooking extends React.Component {
           allowsEditing: true,
           aspect: [4, 3],
         });
-        console.log(result3);
         if (!result3.cancelled ) {
           this.setState({ image3: result3.uri });
         }
@@ -182,8 +178,6 @@ class DetailsBooking extends React.Component {
         if(dataProduct.loading){
             console.log('Loading')
         } else {
-            console.log(dataProduct.product_type)
-
             this.state.products = [];
             return dataProduct.product_type.filter(product => {
                 return product.category.id == productCategory_id

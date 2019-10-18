@@ -1,102 +1,79 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { View, Card, Text, Subtitle, Button,  TouchableOpacity, Divider } from '@shoutem/ui';
+import { View, Card, Text, Subtitle, Button, TouchableOpacity, Divider } from '@shoutem/ui';
 import { Image } from '@shoutem/ui/html';
-import {styles, buttons} from './../components/styles';
+import { styles, buttons } from './../components/styles';
 
 class ProfilesScreen extends React.Component {
     // Title
     static navigationOptions = {
         title: 'YOUR PROFILE',
-        headerTintColor :'#000000',
+        headerTintColor: '#000000',
         headerStyle: {
-          backgroundColor: '#fff',
-          borderBottomWidth: 0.3,
-          borderBottomColor: '#A91B60',
+            backgroundColor: '#fff',
+            borderBottomWidth: 0.3,
+            borderBottomColor: '#A91B60',
         },
         headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 18
+            fontWeight: 'bold',
+            fontSize: 18
         },
     };
-
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state ={
-            profiles: [
-                {
-                    "image": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg",
-                    "name": "Nguyen Van Troi",
-                    "address": "Kajaanintie 40 A 35/1",
-                    "postal": "90130",
-                    "city": "Oulu",
-                    "country": "Finland",
-                    "phone": "090 xxx xxxxx",
-                    "email": "xxxxxx@oasis.vn",
-                    "branch": "Quang Trung"
-                } 
-                
-            ]
-        }
     }
 
-    render(){
-        const profiles = this.state.profiles;
-        return(
+    render() {
+        const profile = global.profile;
+        const employee = global.employee;
+        const branch = global.branch;
+        return (
             <ScrollView style={styles.container}>
                 <View title="CARD WITH DIVIDER">
-                {
-                    profiles.map((profile, i) => {
-                    return (
-                        <View key={i} >
-                            <View style={styles.sameRow}>
-                                <View>
-                                    <Image style={profileStyles.image} source={{uri: profile.image}}/>
-                                    <Button style={buttons.edit} onPress={() => this.props.navigation.navigate('Edit')}><Text style={styles.edituploadText}>Edit</Text></Button>
-                                </View>
-                                <Text style={profileStyles.name}>{profile.name}</Text>
+                        <View style={styles.sameRow}>
+                            <View>
+                                <Image style={profileStyles.image} source={{ uri: profile.image }} />
+                                <Button style={buttons.edit} onPress={() => this.props.navigation.navigate('Edit')}><Text style={styles.edituploadText}>Edit</Text></Button>
                             </View>
-                            <View style={styles.sameRow}>
-                                    <Subtitle>Address:</Subtitle>
-                                    <Text style={styles.floatRight}>{profile.address}</Text>
-                            </View>
-                            <View style={styles.sameRow}>
-                                    <Subtitle>Postal Code:</Subtitle>
-                                    <Text style={styles.floatRight}>{profile.postal}</Text>
-                            </View>
-                            <View style={styles.sameRow}>
-                                    <Subtitle>City:</Subtitle>
-                                    <Text style={styles.floatRight}>{profile.city}</Text>
-                            </View>
-                            <View style={styles.sameRow}>
-                                <Subtitle>Country:</Subtitle>
-                                <Text style={styles.floatRight}>{profile.country}</Text>
-                            </View>
-                            <View style={styles.sameRow}>
-                                <Subtitle>Phone Number:</Subtitle>
-                                <Text style={styles.floatRight}>{profile.phone}</Text>
-                            </View>
-                            <View style={styles.sameRow}>
-                                <Subtitle>Branch Office:</Subtitle>
-                                <Text style={styles.floatRight}>{profile.branch}</Text>
-                            </View>
+                            <Text style={profileStyles.name}>{profile.name}</Text>
                         </View>
-                    );
-                    })
-                }
-                </View>
+                        <View style={styles.sameRow}>
+                            <Subtitle>Address:</Subtitle>
+                            <Text style={styles.floatRight}>{profile.address}</Text>
+                        </View>
+
+                        <View style={styles.sameRow}>
+                            <Subtitle>Email:</Subtitle>
+                            <Text style={styles.floatRight}>{employee.email}</Text>
+                        </View>
+                        <View style={styles.sameRow}>
+                            <Subtitle>Facebook:</Subtitle>
+                            <Text style={styles.floatRight}>{employee.facebook}</Text>
+                        </View>
+                        <View style={styles.sameRow}>
+                            <Subtitle>DOB:</Subtitle>
+                            <Text style={styles.floatRight}>{employee.dob}</Text>
+                        </View>
+
+                        <View style={styles.sameRow}>
+                            <Subtitle>Phone Number:</Subtitle>
+                            <Text style={styles.floatRight}>{profile.phone}</Text>
+                        </View>
+
+                        <View style={styles.sameRow}>
+                            <Subtitle>Branch Office:</Subtitle>
+                            <Text style={styles.floatRight}>{branch.name}</Text>
+                        </View>
+                    </View>
             </ScrollView>
         )
     }
 }
 export default ProfilesScreen
 
-  
+
 const profileStyles = StyleSheet.create({
     card: {
-        // borderColor: 'black',
-        // borderStyle: 'solid',
-        // borderWidth: 1,
         margin: 5,
         padding: 10,
         width: 'auto',
@@ -130,9 +107,7 @@ const profileStyles = StyleSheet.create({
         right: '50%',
         color: '#fff'
     },
-    floatRightBill:{
-        // position: 'absolute',
-        // right: '20%',
+    floatRightBill: {
         textAlign: 'center',
         color: '#fff'
     },
@@ -150,5 +125,5 @@ const profileStyles = StyleSheet.create({
     width: {
         flex: 1
     }
-    
+
 })

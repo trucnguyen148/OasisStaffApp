@@ -28,22 +28,22 @@ const getBookingsQuery = gql`
     positions(type: 2) {
     id
     name
-  }
-  bookings {
-    id
-    date_time
-    products {
+    }
+    bookings {
       id
-      category {
+      date_time
+      products {
         id
+        category {
+          id
+        }
+      }
+      cus {
+        id
+        name
+        phone
       }
     }
-    cus {
-      id
-      name
-      phone
-    }
-  }
   }
 `
 const getScheduleQuery = gql`
@@ -104,4 +104,4 @@ const getDetailBookingProductQuery = gql`
     }
   }
 `
-export  {getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingServiceQuery, getDetailBookingProductQuery}
+export { getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingServiceQuery, getDetailBookingProductQuery }
