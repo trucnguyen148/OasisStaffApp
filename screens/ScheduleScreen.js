@@ -67,7 +67,7 @@ class ScheduleScreen extends React.Component {
     let d2 = (new Date(to_date)).getTime()
     let d3 = (new Date(worktimes.created_at.split(" ")[0]))
 
-    if (d3 <= d2) {
+    if (d3 <= d2 && d3 >= d1) {
       this.state.staffs = []
       this.state.staffs.push({
         id: worktimes.id,
