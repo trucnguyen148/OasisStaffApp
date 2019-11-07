@@ -2,7 +2,6 @@ import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import {styles} from './../../components/styles';
 import { Image, View, Text } from '@shoutem/ui';
-import CollectionsScreen from '../CollectionsScreen';
 
 class DetailsCollection extends React.Component{
 
@@ -12,7 +11,8 @@ class DetailsCollection extends React.Component{
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Text>{collection.name}</Text>
+          <Text style={{fontSize: 20, textAlign: 'center', color: '#000'}}>{collection.name}</Text>
+          <ScrollView>
           {
             collection.images.map((image, id) => {
               return (
@@ -23,6 +23,7 @@ class DetailsCollection extends React.Component{
               )
             })
           }
+          </ScrollView>
         </ScrollView>
       </View>
     );

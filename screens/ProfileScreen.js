@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { View, Card, Text, Subtitle, Button, TouchableOpacity, Divider } from '@shoutem/ui';
-import { Image } from '@shoutem/ui/html';
+import { View, Text, Subtitle, Button, Image } from '@shoutem/ui';
 import { styles, buttons } from './../components/styles';
 
 class ProfilesScreen extends React.Component {
@@ -30,41 +29,41 @@ class ProfilesScreen extends React.Component {
         return (
             <ScrollView style={styles.container}>
                 <View title="CARD WITH DIVIDER">
-                        <View style={styles.sameRow}>
-                            <View>
-                                <Image style={profileStyles.image} source={{ uri: profile.image }} />
-                                <Button style={buttons.edit} onPress={() => this.props.navigation.navigate('Edit')}><Text style={styles.edituploadText}>Edit</Text></Button>
-                            </View>
-                            <Text style={profileStyles.name}>{profile.name}</Text>
+                    <View style={styles.sameRow}>
+                        <View>
+                            <Image style={profileStyles.image} source={{ uri: profile.image }} />
+                            <Button style={buttons.edit} onPress={() => this.props.navigation.navigate('Edit')}><Text style={styles.edituploadText}>Edit</Text></Button>
                         </View>
-                        <View style={styles.sameRow}>
-                            <Subtitle>Address:</Subtitle>
-                            <Text style={styles.floatRight}>{profile.address}</Text>
-                        </View>
-
-                        <View style={styles.sameRow}>
-                            <Subtitle>Email:</Subtitle>
-                            <Text style={styles.floatRight}>{employee.email}</Text>
-                        </View>
-                        <View style={styles.sameRow}>
-                            <Subtitle>Facebook:</Subtitle>
-                            <Text style={styles.floatRight}>{employee.facebook}</Text>
-                        </View>
-                        <View style={styles.sameRow}>
-                            <Subtitle>DOB:</Subtitle>
-                            <Text style={styles.floatRight}>{employee.dob}</Text>
-                        </View>
-
-                        <View style={styles.sameRow}>
-                            <Subtitle>Phone Number:</Subtitle>
-                            <Text style={styles.floatRight}>{profile.phone}</Text>
-                        </View>
-
-                        <View style={styles.sameRow}>
-                            <Subtitle>Branch Office:</Subtitle>
-                            <Text style={styles.floatRight}>{branch.name}</Text>
-                        </View>
+                        <Text style={profileStyles.name}>{profile.name}</Text>
                     </View>
+                    <View style={styles.sameRow}>
+                        <Subtitle>Address:</Subtitle>
+                        <Text style={styles.floatRight}>{profile.address}</Text>
+                    </View>
+
+                    <View style={styles.sameRow}>
+                        <Subtitle>Email:</Subtitle>
+                        <Text style={styles.floatRight}>{employee.email}</Text>
+                    </View>
+                    <View style={styles.sameRow}>
+                        <Subtitle>Facebook:</Subtitle>
+                        <Text style={styles.floatRight}>{employee.facebook}</Text>
+                    </View>
+                    <View style={styles.sameRow}>
+                        <Subtitle>DOB:</Subtitle>
+                        <Text style={styles.floatRight}>{employee.dob}</Text>
+                    </View>
+
+                    <View style={styles.sameRow}>
+                        <Subtitle>Phone Number:</Subtitle>
+                        <Text style={styles.floatRight}>{profile.phone}</Text>
+                    </View>
+
+                    <View style={styles.sameRow}>
+                        <Subtitle>Branch Office:</Subtitle>
+                        <Text style={styles.floatRight}>{branch.name}</Text>
+                    </View>
+                </View>
             </ScrollView>
         )
     }

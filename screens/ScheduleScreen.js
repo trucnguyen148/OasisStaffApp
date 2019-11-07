@@ -1,11 +1,11 @@
 import React from 'react';
 import { ScrollView, FlatList, StyleSheet } from 'react-native';
-import { styles, buttons } from './../components/styles';
-import { Subtitle, DropDownMenu, View, Text, Divider, Button } from '@shoutem/ui';
-import { Calendar } from 'react-native-calendars';
+import {styles} from './../components/styles';
+import { Subtitle, DropDownMenu, View, Text, Divider, Button, Image } from '@shoutem/ui';
+import {Calendar} from 'react-native-calendars';
 
 import { Icon } from 'react-native-elements'
-import { Tooltip, Input } from 'react-native-elements';
+import { Tooltip } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import { graphql } from 'react-apollo';
 import { getScheduleQuery } from '../components/queries/queries';
@@ -102,7 +102,10 @@ class ScheduleScreen extends React.Component {
     this.getData(data, this.state.firstTime);
     const selectedBranch = this.state.selectedBranch || this.state.branches[0];
     if (data.loading) {
-      return <View style={styles.containerPriceProduct}><Text>Loading</Text></View>
+      return <View style={styles.containerPriceProduct}><Image
+      style={styles.logo}
+      source={require("./../assets/images/logo.png")}
+    /></View>
     } else {
 
       return (

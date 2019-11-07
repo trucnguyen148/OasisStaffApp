@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { styles } from './../components/styles';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Subtitle, View, Text, DropDownMenu } from '@shoutem/ui';
+import { Subtitle, View, Text, DropDownMenu, Image } from '@shoutem/ui';
 import { graphql } from 'react-apollo';
 import { getBookingsQuery } from '../components/queries/queries';
 
@@ -114,7 +114,10 @@ class BookingsScreen extends React.Component {
     const selectedCategory = this.state.selectedCategory || this.state.categories[0];
 
     if (data.loading) {
-      return <View><Text>Loading</Text></View>
+      return <View><Image
+      style={styles.logo}
+      source={require("./../assets/images/logo.png")}
+    /></View>
     } else {
       return (
         <View style={styles.container}>

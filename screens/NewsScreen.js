@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { styles } from '../components/styles';
-import { Text, Divider, View, TouchableOpacity, } from '@shoutem/ui';
+import { Text, Divider, View, TouchableOpacity, Image } from '@shoutem/ui';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { graphql } from 'react-apollo';
@@ -62,7 +62,10 @@ class NewsScreen extends React.Component {
     const news = this.state.news;
 
     if (data.loading) {
-      return <View style={styles.containerPriceProduct}><Text>Loading</Text></View>
+      return <View style={styles.containerPriceProduct}><Image
+      style={styles.logo}
+      source={require("./../assets/images/logo.png")}
+    /></View>
     } else {
       return (
         <ScrollView style={styles.container}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Modal, TouchableHighlight, Alert } from 'react-native';
-import { styles, buttons } from './../components/styles';
-import { GridRow, TouchableOpacity, Card, Image, View, Subtitle, Caption, ListView, ImageBackground, Text } from '@shoutem/ui';
+import { styles } from './../components/styles';
+import { GridRow, TouchableOpacity, Card, Image, View, Subtitle, ListView, Text } from '@shoutem/ui';
 import { graphql } from 'react-apollo';
 import { getCollectionQuerry } from '../components/queries/queries';
 
@@ -105,7 +105,10 @@ class CollectionsScreen extends React.Component {
   render() {
     const data = this.props.data;
     if (data.loading) {
-      return <View style={styles.containerPriceProduct}><Text>Loading</Text></View>
+      return <View style={styles.containerPriceProduct}><Image
+      style={styles.logo}
+      source={require("./../assets/images/logo.png")}
+    /></View>
     }
     else {
       const collections = data.collections;
