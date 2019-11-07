@@ -5,24 +5,24 @@ import { Image, View, Text } from '@shoutem/ui';
 import CollectionsScreen from '../CollectionsScreen';
 
 class DetailsCollection extends React.Component{
-  
- 
+
   render() {
+    const collection = this.props.navigation.state.params.collection
+    
     return (
       <View style={styles.container}>
-          {/* Hot Deal */}
         <ScrollView>
           <Text>{collection.name}</Text>
-          {/* {
-            collection.images.map((photo, id) => {
+          {
+            collection.images.map((image, id) => {
               return (
                 <View key={id} style={detailsCollectionStyles.space}>
-                    <Image styleName="large-wide" source={{uri: photo.image.url}} />
+                    <Image styleName="large-wide" source={{uri: image.image}} />
                 </View>
                 
               )
             })
-          } */}
+          }
         </ScrollView>
       </View>
     );

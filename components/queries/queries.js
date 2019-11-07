@@ -54,6 +54,11 @@ const getScheduleQuery = gql`
       employees{
         id
         name
+        worktime{
+          id
+          start
+          end
+        }
       }
   }
   }
@@ -109,6 +114,7 @@ const getCollectionQuerry = gql`
   {
   collections{
     id
+    name
     images {
       id
       image
@@ -117,4 +123,14 @@ const getCollectionQuerry = gql`
 }
 `
 
-export { getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingServiceQuery, getDetailBookingProductQuery, getCollectionQuerry }
+const getWorkTimesQuerry = gql`
+  {
+    workTimes{
+    id
+    start
+    end
+  }
+}
+`
+
+export { getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingServiceQuery, getDetailBookingProductQuery, getCollectionQuerry, getWorkTimesQuerry }
