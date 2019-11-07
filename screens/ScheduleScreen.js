@@ -1,14 +1,15 @@
 import React from 'react';
 import { ScrollView, FlatList, StyleSheet } from 'react-native';
-import {styles} from './../components/styles';
+import { styles } from './../components/styles';
 import { Subtitle, DropDownMenu, View, Text, Divider, Button, Image } from '@shoutem/ui';
-import {Calendar} from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 
 import { Icon } from 'react-native-elements'
 import { Tooltip } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import { graphql } from 'react-apollo';
 import { getScheduleQuery } from '../components/queries/queries';
+import { URL, makeRequest } from '../components/api';
 
 class ScheduleScreen extends React.Component {
   // Title
@@ -33,15 +34,18 @@ class ScheduleScreen extends React.Component {
       branches: [],
       branch_id: null,
       staffs: [],
-      firstTime: false,
+      date: {
+        from: null,
+        to: null,
+      },
+      worktimes: null,
     }
+
     this.onDayPress = this.onDayPress.bind(this);
     this.onToDayPress = this.onToDayPress.bind(this);
   }
-  componentDidMount() {
-    this.state.firstTime = true
-  }
-  getData(data, firstTime) {
+
+  getData(data) {
     if (data.loading) {
       console.log('Loading')
     } else {
@@ -52,12 +56,40 @@ class ScheduleScreen extends React.Component {
             "name": branch.name
           })
         })
-      }
-      if (firstTime) {
-        this.getWorktimes(this.state.branches[0].id)
-        this.state.firstTime = false
+        this.getWorktimes()
       }
     }
+  }
+
+  compareDate(from_date, to_date) {
+    const worktimes = this.state.worktimes
+    let d1 = (new Date(from_date)).getTime()
+    let d2 = (new Date(to_date)).getTime()
+    let d3 = (new Date(worktimes.created_at.split(" ")[0]))
+
+    if (d3 <= d2) {
+      this.state.staffs = []
+      this.state.staffs.push({
+        id: worktimes.id,
+        date: worktimes.created_at.split(" ")[0],
+        start_time: worktimes.start,
+        end_time: worktimes.end,
+      })
+    }
+
+    console.log(this.state.staffs)
+  }
+
+  getWorktimes() {
+    makeRequest('GET', URL + "worktime-employee/" + global.employee.id + "")
+      .then((response) => {
+        this.setState({
+          worktimes: JSON.parse(response),
+        })
+      })
+      .catch(err => {
+        console.error('There was an error!', err.statusText);
+      });
   }
 
   serviceSeparator = () => {
@@ -73,57 +105,38 @@ class ScheduleScreen extends React.Component {
     this.setState({
       fromSelected: day.dateString,
     });
+    this.state.date.from = day.dateString
   };
 
   onToDayPress(day) {
-    this.setState({
-      toSelected: day.dateString,
-    });
+    if (this.state.date.from === null) {
+      alert("Choose start date")
+    } else {
+      this.setState({
+        toSelected: day.dateString,
+      });
+      this.state.date.to = day.dateString
+      this.compareDate(this.state.date.from, this.state.date.to)
+    }
   };
-
-  getWorktimes(id) {
-    let branch = this.props.data.branches.filter(branch => {
-      return branch.id === id
-    })
-    this.state.staffs = []
-    branch[0].employees.forEach(emp => {
-      this.state.staffs.push({
-        id: emp.id,
-        name: emp.name,
-        start_time: emp.worktime.start,
-        end_time: emp.worktime.end,
-      })
-    })
-  }
-
 
   render() {
     const data = this.props.data;
-    this.getData(data, this.state.firstTime);
+    this.getData(data);
     const selectedBranch = this.state.selectedBranch || this.state.branches[0];
     if (data.loading) {
       return <View style={styles.containerPriceProduct}><Image
-      style={styles.logo}
-      source={require("./../assets/images/logo.png")}
-    /></View>
+        style={styles.logo}
+        source={require("./../assets/images/logo.png")}
+      /></View>
     } else {
-
       return (
         <ScrollView style={styles.container}>
           {/* Choose branch */}
           <View style={styles.sameRow}>
             <Subtitle>Branch:</Subtitle>
-            <View style={{ position: 'absolute', right: -10 }}>
-              <DropDownMenu
-                options={this.state.branches}
-                selectedOption={selectedBranch ? selectedBranch : this.state.branches[0]}
-                onOptionSelected={(branch) => {
-                  this.setState({ selectedBranch: branch })
-                  this.getWorktimes(branch.id)
-                }}
-                titleProperty="name"
-                valueProperty="branches.name"
-              />
+            <View style={{ position: 'absolute', right: 0 }}>
+              <Subtitle>{global.branch.name}</Subtitle>
             </View>
           </View>
           {/* Choose From Date */}
@@ -189,18 +202,15 @@ class ScheduleScreen extends React.Component {
               </Tooltip>
             </View>
           </View>
-          <Button style={styles.buttonStyleMain}><Text style={styles.buttonText} onPress={() => {
-            this.getWorktimes(this.state.branch_id)
-          }}>Search</Text></Button>
           <Divider />
 
           <LinearGradient colors={['#FFE5E5', '#FFC0CB']} >
             {/* Title */}
             <View style={scheduleStyles.sameRow}>
-              <Subtitle style={scheduleStyles.titleDate}>Start time
+              <Subtitle style={scheduleStyles.titleDate}>Start date
               </Subtitle>
-              <Subtitle style={scheduleStyles.titleShift}>End time</Subtitle>
-              <Subtitle style={scheduleStyles.titlePosition}>Staff</Subtitle>
+              <Subtitle style={scheduleStyles.titleShift}>Start time</Subtitle>
+              <Subtitle style={scheduleStyles.titlePosition}>End time</Subtitle>
             </View>
             <View
               style={{ height: 0.5, width: '100%', backgroundColor: '#FF92A5' }}
@@ -213,10 +223,13 @@ class ScheduleScreen extends React.Component {
               renderItem={({ item }) => (
                 <View style={scheduleStyles.sameRow}>
                   <Text style={scheduleStyles.date}>
+                    {item.date}
+                  </Text>
+                  <Text style={scheduleStyles.date}>
                     {item.start_time}
                   </Text>
                   <Text style={scheduleStyles.shift}>{item.end_time}</Text>
-                  <Text style={scheduleStyles.position} onPress={() => this.props.navigation.navigate('DetailsBooking')}>{item.name}</Text>
+                  
                 </View>
               )}
             />
