@@ -11,7 +11,7 @@ class DetailsCollection extends React.Component{
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Text style={{fontSize: 20, textAlign: 'center', color: '#000'}}>{collection.name}</Text>
+          <Text style={{fontSize: 20, textAlign: 'center', color: '#000', marginBottom: 15}}>{collection.name}</Text>
           <ScrollView>
           {
             collection.images.map((image, id) => {

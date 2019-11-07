@@ -25,53 +25,52 @@ class CollectionsScreen extends React.Component {
     super(props);
     this.renderRow = this.renderRow.bind(this);
     this.state = {
-      modalVisible: false,
-
+      // modalVisible: false,
     }
   }
 
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
+  // setModalVisible(visible) {
+  //   this.setState({ modalVisible: visible });
+  // }
 
   getDetailCollection(id) {
     const collection = collections.filter(collection => {
       return collection.id === id
     })
-    return (
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={this.state.modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-        }}>
-        <ScrollView style={styles.container}>
-          {/* Hot Deal */}
-          <ScrollView>
-            {
-              collection.images.map(image => {
-                return (
-                  <View key={image.id} style={{ marginTop: 22 }}>
-                    <View>
-                      <View>
-                        <Image styleName="large-wide" source={{ uri: image.image }} />
-                      </View>
-                      <TouchableHighlight
-                        onPress={() => {
-                          this.setModalVisible(!this.state.modalVisible);
-                        }}>
-                        <Text>Hide Modal</Text>
-                      </TouchableHighlight>
-                    </View>
-                  </View>
-                )
-              })
-            }
-          </ScrollView>
-        </ScrollView>
-      </Modal>
-    );
+    // return (
+    //   <Modal
+    //     animationType="slide"
+    //     transparent={false}
+    //     visible={this.state.modalVisible}
+    //     onRequestClose={() => {
+    //       Alert.alert('Modal has been closed.');
+    //     }}>
+    //     <ScrollView style={styles.container}>
+    //       {/* Hot Deal */}
+    //       <ScrollView>
+    //         {
+    //           collection.images.map(image => {
+    //             return (
+    //               <View key={image.id} style={{ marginTop: 22 }}>
+    //                 <View>
+    //                   <View>
+    //                     <Image styleName="large-wide" source={{ uri: image.image }} />
+    //                   </View>
+    //                   <TouchableHighlight
+    //                     onPress={() => {
+    //                       this.setModalVisible(!this.state.modalVisible);
+    //                     }}>
+    //                     <Text>Hide Modal</Text>
+    //                   </TouchableHighlight>
+    //                 </View>
+    //               </View>
+    //             )
+    //           })
+    //         }
+    //       </ScrollView>
+    //     </ScrollView>
+    //   </Modal>
+    // );
   }
 
   renderRow(rowData) {
@@ -88,7 +87,7 @@ class CollectionsScreen extends React.Component {
                 source={{ uri: collection.images[0].image }}
               />
               <View styleName="content">
-                <Subtitle numberOfLines={3}>{collection.name}</Subtitle>
+                <Subtitle numberOfLines={3} style={{textAlign: 'center'}}>{collection.name}</Subtitle>
               </View>
             </Card>
           </TouchableOpacity>
