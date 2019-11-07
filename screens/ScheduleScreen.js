@@ -61,23 +61,32 @@ class ScheduleScreen extends React.Component {
     }
   }
 
+  addDays(d, days) {
+    let date = new Date(d);
+    date.setDate(date.getDate() + days);
+    return date.getFullYear() + "-" + parseInt(date.getMonth()+1) + "-" + date.getDate();
+  }
+
   compareDate(from_date, to_date) {
     const worktimes = this.state.worktimes
-    let d1 = (new Date(from_date)).getTime()
-    let d2 = (new Date(to_date)).getTime()
-    let d3 = (new Date(worktimes.created_at.split(" ")[0]))
+    let d1 = new Date(from_date)
+    let d2 = new Date(to_date)
 
-    if (d3 <= d2 && d3 >= d1) {
-      this.state.staffs = []
+    // To calculate the time difference of two dates 
+    let difference_in_Time = d2.getTime() - d1.getTime();
+
+    // To calculate the no. of days between two dates 
+    let difference_in_Days = difference_in_Time / (1000 * 3600 * 24);
+    this.state.staffs = []
+
+    for (let i = 0; i <= difference_in_Days; i++) {
       this.state.staffs.push({
         id: worktimes.id,
-        date: worktimes.created_at.split(" ")[0],
+        date: this.addDays(from_date, i),
         start_time: worktimes.start,
         end_time: worktimes.end,
       })
     }
-
-    console.log(this.state.staffs)
   }
 
   getWorktimes() {
@@ -207,7 +216,7 @@ class ScheduleScreen extends React.Component {
           <LinearGradient colors={['#FFE5E5', '#FFC0CB']} >
             {/* Title */}
             <View style={scheduleStyles.sameRow}>
-              <Subtitle style={scheduleStyles.titleDate}>Start date
+              <Subtitle style={scheduleStyles.titleDate}>Date
               </Subtitle>
               <Subtitle style={scheduleStyles.titleShift}>Start time</Subtitle>
               <Subtitle style={scheduleStyles.titlePosition}>End time</Subtitle>
@@ -229,7 +238,7 @@ class ScheduleScreen extends React.Component {
                     {item.start_time}
                   </Text>
                   <Text style={scheduleStyles.shift}>{item.end_time}</Text>
-                  
+
                 </View>
               )}
             />
