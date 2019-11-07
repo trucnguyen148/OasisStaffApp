@@ -15,6 +15,13 @@ import { StyleSheet } from 'react-native'
         margin: 10,
         paddingTop: 50
     },
+    logo: {
+        width: 350, 
+        height: 350, 
+        marginLeft: 'auto', 
+        marginRight: 'auto', 
+        marginTop: '27%'
+    },
     headerCard: {
         fontWeight: 'bold',
         fontSize: 15,

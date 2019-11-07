@@ -104,4 +104,17 @@ const getDetailBookingProductQuery = gql`
     }
   }
 `
-export { getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingServiceQuery, getDetailBookingProductQuery }
+
+const getCollectionQuery = gql` 
+  {
+    collections {
+      id
+      name
+    }  
+    collectionImages{
+      id
+      image
+    }
+  }
+`
+export { getBookingsQuery, getScheduleQuery, getAnnoucementsQuery, getDetailBookingServiceQuery, getDetailBookingProductQuery, getCollectionQuery }
