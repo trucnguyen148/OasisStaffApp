@@ -39,46 +39,6 @@ class NewsScreen extends React.Component {
     })
   }
 
-  componentDidMount() {
-    this.getProfile(global.user[0].profile_id)
-  }
-
-  getProfile(id) {
-    makeRequest('GET', URL + "profile/" + id + "", this.state.requests)
-      .then((response) => {
-        global.profile = JSON.parse(response)
-      })
-      .then(() => {
-        this.getEmployee(global.profile.employee_id)
-      })
-      .catch(err => {
-        console.error('There was an error in profile!', err.statusText);
-      });
-  }
-
-  getEmployee(id) {
-    makeRequest('GET', URL + "employee/" + id + "", this.state.requests)
-      .then((response) => {
-        global.employee = JSON.parse(response)
-      })
-      .then(() => {
-        this.getBranch(global.employee.branch_id)
-      })
-      .catch(err => {
-        console.error('There was an error in employee!', err.statusText);
-      });
-  }
-
-  getBranch(id) {
-    makeRequest('GET', URL + "branch/" + id + "", this.state.requests)
-      .then((response) => {
-        global.branch = JSON.parse(response)
-      })
-      .catch(err => {
-        console.error('There was an error in employee!', err.statusText);
-      });
-  }
-
   getData(data) {
     if (data.loading) {
       console.log('Loading')

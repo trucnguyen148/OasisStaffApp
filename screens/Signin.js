@@ -15,7 +15,7 @@ class Signin extends React.Component {
       user: [],
     }
   }
-  
+
   componentDidMount() {
     this.spring()
   }
@@ -52,11 +52,52 @@ class Signin extends React.Component {
           alert("Wrong phone or password")
         } else {
           global.user = this.state.user
-          this.props.navigation.navigate('MainTabNavigator')
         }
+      })
+      .then(() => {
+        this.getProfile(global.user[0].profile_id)
       })
       .catch(err => {
         console.error('There was an error!', err.statusText);
+      });
+  }
+
+  getProfile(id) {
+    makeRequest('GET', URL + "profile/" + id + "", this.state.requests)
+      .then((response) => {
+        global.profile = JSON.parse(response)
+      })
+      .then(() => {
+        this.getEmployee(global.profile.employee_id)
+      })
+      .catch(err => {
+        console.error('There was an error in profile!', err.statusText);
+      });
+  }
+
+  getEmployee(id) {
+    makeRequest('GET', URL + "employee/" + id + "", this.state.requests)
+      .then((response) => {
+        global.employee = JSON.parse(response)
+      })
+      .then(() => {
+        this.getBranch(global.employee.branch_id)
+      })
+      .catch(err => {
+        console.error('There was an error in employee!', err.statusText);
+      });
+  }
+
+  getBranch(id) {
+    makeRequest('GET', URL + "branch/" + id + "", this.state.requests)
+      .then((response) => {
+        global.branch = JSON.parse(response)
+      })
+      .then((response) => {
+        this.props.navigation.navigate('MainTabNavigator')
+      })
+      .catch(err => {
+        console.error('There was an error in employee!', err.statusText);
       });
   }
 

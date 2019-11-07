@@ -1,13 +1,15 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Modal,  TouchableHighlight, Alert } from 'react-native';
-import {styles, buttons} from './../components/styles';
-import { GridRow, TouchableOpacity, Card, Image, View, Subtitle, Caption, ListView, ImageBackground , Text} from '@shoutem/ui';
+import { ScrollView, StyleSheet, Modal, TouchableHighlight, Alert } from 'react-native';
+import { styles, buttons } from './../components/styles';
+import { GridRow, TouchableOpacity, Card, Image, View, Subtitle, Caption, ListView, ImageBackground, Text } from '@shoutem/ui';
+import { graphql } from 'react-apollo';
+import { getCollectionQuerry } from '../components/queries/queries';
 
-class CollectionsScreen extends React.Component{
+class CollectionsScreen extends React.Component {
   // Title
   static navigationOptions = {
     title: 'COLLECTIONS',
-    headerTintColor :'#000000',
+    headerTintColor: '#000000',
     headerStyle: {
       backgroundColor: '#fff',
       borderBottomWidth: 0.3,
@@ -20,104 +22,31 @@ class CollectionsScreen extends React.Component{
   };
 
   constructor(props) {
-      super(props);
-      this.renderRow = this.renderRow.bind(this);
-      this.state = {
-        modalVisible: false,
-        collections: [
-          {
-            "id": 0,
-              "name": "Gaspar Brasserie",
-              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-              "images": [
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
-              ]
-              
-          },
-          {
-            "id": 1, 
-              "name": "Chalk Point Kitchen",
-              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-              "images": [
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
-              ]
-          },
-          {
-            "id": 2,
-              "name": "Kyoto Amber Upper East",
-              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-              "images": [
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
-              ]
-          },
-          {
-            "id": 3,
-              "name": "Kyoto Amber Upper East",
-              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
-              "images": [
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-              ]
-          },
-          {
-            "id": 4,
-              "name": "Kyoto Amber Upper East",
-              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" },
-              "images": [
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
-              ]
-          },
-          {
-            "id": 5,
-              "name": "Kyoto Amber Upper East",
-              "avatar": { "url": "https://shoutem.github.io/static/getting-started/restaurant-6.jpg" },
-              "images": [
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-6.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-                { "url": "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" },
-              ]
-          }
-        ],
-      }
-    }
+    super(props);
+    this.renderRow = this.renderRow.bind(this);
+    this.state = {
+      modalVisible: false,
 
-    setModalVisible(visible) {
-      this.setState({modalVisible: visible});
     }
-    
-    renderRow(rowData) {
-      const cellViews = rowData.map((collection) => {
-        return (
-          <View key={collection.id}>
+  }
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
+  renderRow(rowData) {
+    const cellViews = this.props.data.collections.map((collection) => {
+      return (
+        <View key={collection.id}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Details', {
-                    collection: collection})}>
+            collection: collection
+          })}>
             <Card style={collectionStyles.border}>
               <Image
                 styleName="medium-wide"
                 style={collectionStyles.image}
-                source={{ uri: collection.avatar.url  }}
+                source={{ uri: collection.images[0].image }}
               />
-              <View styleName="content">
-                <Subtitle style={collectionStyles.subtitle} numberOfLines={3}>{collection.name}</Subtitle>
-              </View>
             </Card>
           </TouchableOpacity>
 
@@ -143,58 +72,90 @@ class CollectionsScreen extends React.Component{
               </View>
             </View>
           </Modal> */}
-          </View>
-        );
-      });
+        </View>
+      );
+    });
+    return (
+      <GridRow columns={2}>
+        {cellViews}
+      </GridRow>
+    );
+  }
+
+  render2() {
+    const data = this.props.data;
+    if (data.loading) {
+      return <View style={styles.containerPriceProduct}><Text>Loading</Text></View>
+    }
+    else {
+      const collections = data.collections;
       return (
-          <GridRow columns={2}>
-            {cellViews}
-          </GridRow>
-        );
-      }
+        <ScrollView style={styles.container}>
+          {/* Hot Deal */}
+          <ScrollView>
+            {
+              collections.map(collection => {
+                return (
+                  <View key={photo.id} style={hotdealsStyles.space}>
+                    <Image styleName="large-wide" source={{ uri: collection.images[0].image }} />
+                  </View>
+                )
+              })
+            }
+          </ScrollView>
+        </ScrollView>
+      );
+    }
 
+  }
 
-  render(){
-    const collections = this.state.collections;
-    let isFirstArticle = false;
-    const groupedData = GridRow.groupByRows(collections, 2, () => {
+  render() {
+    const data = this.props.data;
+    if (data.loading) {
+      return <View style={styles.containerPriceProduct}><Text>Loading</Text></View>
+    }
+    else {
+      const collections = data.collections;
+      let isFirstArticle = false;
+      const groupedData = GridRow.groupByRows(collections, 2, () => {
         if (isFirstArticle) {
-        isFirstArticle = true;
-        return 2;
+          isFirstArticle = true;
+          return 2;
         }
         return 1;
-    });
-    return(
+      });
+      return (
         <ScrollView style={styles.containerCollections}>
-            <ListView
-                data={groupedData}
-                renderRow={this.renderRow}
-            />
+          <ListView
+            data={groupedData}
+            renderRow={this.renderRow}
+          />
         </ScrollView>
-    )
+      )
+    }
   }
 }
 
-export default CollectionsScreen
+export default graphql(getCollectionQuerry)(CollectionsScreen)
 
 
 const collectionStyles = StyleSheet.create({
-    subtitle:{
-        textAlign: 'center',
-        flex: 1
-    },
-    border:{
-      borderStyle: 'solid',
-      borderWidth: 1.3,
-      borderColor: '#000000',
-      paddingTop: 5,
-      marginBottom: 3,
-      width: 'auto',
-      height: 170
-    },
-    image:{
-      width: '95%',
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    },
+  subtitle: {
+    textAlign: 'center',
+    flex: 1
+  },
+  border: {
+    borderStyle: 'solid',
+    borderWidth: 1.3,
+    borderColor: '#000000',
+    paddingTop: 5,
+    marginBottom: 3,
+    width: 'auto',
+    height: 170
+  },
+  image: {
+    width: '95%',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
 })
