@@ -8,7 +8,7 @@ It is for staffs to check schedule, mark and upload photos after finish and chec
   <li> Booking Page has two main functions, one function is to check waiting bookings and another function is to create new booking which staff uses to create for new customer or customer comes without reservation. </li>
   <li> Profile Page has basic information of own account, for example: avatar, name, address, phone number, email, points, and rank (from one to five stars) and pay slips. </li>
   
-<h4>This is mindmap of Staff's mobile application <.h4>
+<h4>This is mindmap of Staff's mobile application </h4>
   
 ![Mindmap](https://lh3.googleusercontent.com/sdlM33G8sM5fCJdTvwvW_yBVNSi3JLSyAryYXUK-AWCTKzAeomdL3nEjl314pxZUJDzcPirjl7qaC__gDFWEKDPNMBYZ3rYWpBuw8lwoATSszLBQjLBA17tsPzmNCcC9ucWnjHZzzlkr4Uqj-FD6EwJw7k96ifbpKlaU22O-iVtp-OWjhq5Q5AWLpvDW2t7INWCuM5ATwOZonqP8IoTJfq-C2EpjHYrByMIxqk8f2x257IG_U_P7lBLFVX32iFCsbfoa85A5TAVhByXymAdaGNSIENscYv6aqws6s9WmL43DuDGhB5hScWADJ04G7VfmkGlf1y-6yKp3bAt36kK6-UshC25asjYgDft2F1OXhFlWcJIA8Tj3KTh5Zn8dBb-5WLOl-ySJgv5ox9uexLvGKDzu5v7yCOREVQyqSe1MIkoUO9R5ESlM9QNZJ7M09VRaL7TUuQ0ZH9bodjTbzq0NoVtG3WBmOwr4xiGy7J_dRSZfZXwheWny5q4v9RELHKN4-rRMk_LQrYcKQvuQc-jw3r2E-zuvVrjqxDJFXC55vBiGaZYBPevHiU4tot5GEKTOl2aGRoU3iHb6bEY4ItzBQq3cUNPSLV-DIO1plALKvaw-8RmKWSiHKEH_WnrtRhsscP_FnijroVemd5-vBrswYUULf6wodcxbdOuZzYEBZ698sYta2BWrCnyC9IOsQg=w1226-h814-no)
   
